@@ -147,3 +147,100 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+// Bubble pop effect
+document.addEventListener('DOMContentLoaded', function() {
+    // Create new bubbles when the page loads
+    createBubbles(5);
+    
+    // Add click event listeners to all bubbles
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('bubble')) {
+            popBubble(e.target);
+        }
+    });
+});
+
+// Function to pop a bubble
+function popBubble(bubble) {
+    // Play pop sound (optional)
+    const popSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT18A'); // You can replace this with a real sound file
+    popSound.volume = 0.2;
+    popSound.play().catch(e => console.log('Audio play failed:', e));
+    
+    // Add pop animation
+    bubble.style.animation = 'pop 0.5s ease forwards';
+    
+    // Remove the bubble after animation completes
+    setTimeout(() => {
+        bubble.remove();
+        // Create a new bubble to replace the popped one
+        createBubbles(1);
+    }, 500);
+}
+
+// Function to create new bubbles
+function createBubbles(count) {
+    for (let i = 0; i < count; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        
+        // Random size between 40px and 180px
+        const size = Math.floor(Math.random() * 140) + 40;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        // Random position
+        bubble.style.left = `${Math.random() * 90}%`;
+        bubble.style.top = `${Math.random() * 90}%`;
+        
+        // Random animation duration and delay
+        bubble.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        bubble.style.animationDelay = `${Math.random() * 5}s`;
+        
+        document.body.appendChild(bubble);
+    }
+}
+
+// Enhanced Header Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('header');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section');
+    
+    // Add scrolled class to header when scrolling
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        
+        // Highlight active section in navigation
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    });
+    
+    // Add hover effect to logo
+    const logo = document.querySelector('.logo a');
+    logo.addEventListener('mouseover', function() {
+        this.style.textShadow = '0 0 10px rgba(74, 108, 247, 0.5)';
+    });
+    
+    logo.addEventListener('mouseout', function() {
+        this.style.textShadow = 'none';
+    });
+});
